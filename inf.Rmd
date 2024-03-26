@@ -1,0 +1,37 @@
+---
+title: "tp_stat"
+output: html_document
+date: "2024-03-26"
+---
+
+Setear el working directory
+
+```{r,echo=TRUE}
+rm(list=ls())
+setwd("~/Documentos/tp_stat")
+```
+
+Leer la tabla
+
+```{r,echo=TRUE}
+data <- read.table("ENNyS_menorA2.txt", header = TRUE)
+attach(data)
+```
+
+## Ejercicio 1
+
+```{r,echo=TRUE}
+library(ggplot2)
+
+ggplot() +
+  geom_histogram(aes(x = Perim_cef, y = after_stat(density)), binwidth = 1) +
+  geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'rectangular'), kernel = "rectangular") +
+  geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'epanechnikov'), kernel = "epanechnikov") +
+  geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'gaussian'), kernel = "gaussian")
+```
+
+Como se observa en el gráfico, las densidades estimadas casi no presentan diferencias, por lo que no parece ser una ventaja utilizar un núcleo por sobre otro.
+
+
+## Ejercicio 2
+
