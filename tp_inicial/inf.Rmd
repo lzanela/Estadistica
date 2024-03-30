@@ -1,15 +1,8 @@
 ---
-title: "tp_stat"
+title: "TP Inicial de Estadística"
 output: html_document
 date: "2024-03-26"
 ---
-
-Setear el working directory
-
-```{r,echo=TRUE}
-rm(list=ls())
-setwd("~/Documentos/tp_stat")
-```
 
 Leer la tabla
 
@@ -32,6 +25,28 @@ ggplot() +
 
 Como se observa en el gráfico, las densidades estimadas casi no presentan diferencias, por lo que no parece ser una ventaja utilizar un núcleo por sobre otro.
 
-
 ## Ejercicio 2
+
+#### a) Estimación usando el histograma
+
+```{r,echo=TRUE}
+perim_cef <- data$Perim_cef
+data_range <- seq(floor(min(perim_cef)), ceiling(max(perim_cef)), by = 1)
+hist_obj <- hist(perim_cef, breaks = data_range, plot = FALSE)
+bin_widths <- diff(hist_obj$breaks)
+in_range_indices <- which(hist_obj$mids >= 42 & hist_obj$mids <= 48)
+sum(hist_obj$density[in_range_indices] * bin_widths[in_range_indices])
+```
+
+#### b) Estimación usando la densidad con núcleo de Epanechnikov
+
+```{r,echo=TRUE}
+epanechnikov <- density(perim_cef, kernel = "epanechnikov")
+epanechnikov_cdf <- with(epanechnikov, splinefun(x, cumsum(y) / sum(y), method="monoH.FC"))
+epanechnikov_cdf(48) - epanechnikov_cdf(42)
+```
+
+No hay cuentas que justificar más allá del hecho de que la forma de estimar la probabilidad con el histograma es haciendo la suma de las áreas de las cajas del histograma que están comprendidas entre 42 y 48, y que $P_E\{42 < X < 48\} = P_E\{X < 48\} - P_E\{X < 42\}$, con $X$ siendo la variable aleatoria asociada al perímetro cefálico de un bebé y $P_E$ la función de distribución acumulada asociada a la densidad con núcleo de Epanechnikov.
+
+## Ejercicio 3
 
