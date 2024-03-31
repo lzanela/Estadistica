@@ -91,3 +91,11 @@ Vemos que la distribución del perímetro cefálico de los bebés que provienen 
 bagplot(Perim_cef, Talla, xlab='Perim_cef', ylab='Talla')
 ```
 Tenemos datos atípicos con valores muy bajos de "perímetro encefálico", pero cuando esto sucede, la "talla" se encuentra en el rango esperable. Por otro lado, tenemos datos atípicos con valores muy altos y muy bajos de la "talla" pero, de la misma forma, cuando esto sucede, el "perímetro encefálico" se encuentra en el rango esperable. En conclusión no encontramos datos atípicos de las dos variables a la vez, sino o bien del "perímetro encefálico" (con valores atípicamente bajos), o bien de la "talla" (con valores atípicamente tanto bajos como altos) de forma independiente.
+
+##Ejercicio 7
+```{r,echo=TRUE}
+perim_cef_out <- boxplot.stats(Perim_cef)$out
+talla_out <- boxplot.stats(Talla)$out
+bagplot(Perim_cef[!Perim_cef %in% perim_cef_out], Talla[!Talla %in% talla_out], xlab='Perim_cef', ylab='Talla')
+```
+Ya no se visualizan datos atípicos. Esto ocurre porque los outliers dependían de forma independiente de cada variable, tal como se explicó en el ejercicio anterior. Entonces, al eliminar los outliers de cada variable por separado, se eliminan los outliers de la variable múltiple.
