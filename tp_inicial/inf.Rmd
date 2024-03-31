@@ -73,6 +73,20 @@ ggplot() +
   geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'gaussian'), kernel = "gaussian", adjust = 2)
 ```
 
+##Ejercicio 4 
+
+```{r,echo=TRUE}
+hist(Perim_cef,breaks = 25,freq = FALSE)
+lines(density(Perim_cef, kernel='gaussian'),col='red')
+sexoVaron = data[Sexo =='Varon',]
+sexoMujer = data[Sexo == 'Mujer',]
+lines(density(sexoVaron$Perim_cef, kernel='gaussian'),col='green')
+lines(density(sexoMujer$Perim_cef, kernel='gaussian'),col='blue')
+legend("topleft", legend = c("Sexo Varon", "Sexo Mujer"), col = c("green", "blue"), lty = 1, lwd = 2)
+```
+Podemos observar que la curva de densidad de los varones está corrida hacia la derecha con respecto a la curva de la densidad conjunta, lo que indica valores en general más grandes. La curva de las mujeres está desplazada hacia la izquierda con respecto a la curva de densidad conjunta. Podemos concluir que, en general, el perímetro cefálico de los varones es mayor que el de las mujeres.
+
+
 ##Ejercicio 5
 ```{r,echo=TRUE}
 hist(Perim_cef, breaks=25, freq=FALSE)
