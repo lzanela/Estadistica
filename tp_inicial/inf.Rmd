@@ -83,3 +83,5 @@ lines(density(embarazo_simple$Perim_cef, kernel='gaussian'),col='green')
 lines(density(embarazo_multiple$Perim_cef, kernel='gaussian'),col='blue')
 legend("topleft", legend = c("Embarazo Simple", "Embarazo Multiple"), col = c("green", "blue"), lty = 1, lwd = 2)
 ```
+
+Vemos que la distribución del perímetro cefálico de los bebés que provienen de un embarazo simple está más corrida hacia la derecha de los que provienen de un embarazo múltiple. Por lo tanto, podemos inferir que los primeros tienden a tener mayor perímetro cefálico 
