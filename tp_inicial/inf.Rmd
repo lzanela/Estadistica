@@ -78,8 +78,8 @@ ggplot() +
 ```{r,echo=TRUE}
 hist(Perim_cef,breaks = 25,freq = FALSE)
 lines(density(Perim_cef, kernel='gaussian'),col='red')
-sexoVaron = data[Sexo =='Varon',]
-sexoMujer = data[Sexo == 'Mujer',]
+sexoVaron <- data[Sexo =='Varon',]
+sexoMujer <- data[Sexo == 'Mujer',]
 lines(density(sexoVaron$Perim_cef, kernel='gaussian'),col='green')
 lines(density(sexoMujer$Perim_cef, kernel='gaussian'),col='blue')
 legend("topleft", legend = c("Sexo Varon", "Sexo Mujer"), col = c("green", "blue"), lty = 1, lwd = 2)
@@ -91,8 +91,8 @@ Podemos observar que la curva de densidad de los varones está corrida hacia la 
 ```{r,echo=TRUE}
 hist(Perim_cef, breaks=25, freq=FALSE)
 lines(density(Perim_cef, kernel='gaussian'))
-embarazo_simple <- data[data$Tipo_embarazo=='Simple',]
-embarazo_multiple <- data[data$Tipo_embarazo=='Multiple',]
+embarazo_simple <- data[Tipo_embarazo=='Simple',]
+embarazo_multiple <- data[Tipo_embarazo=='Multiple',]
 lines(density(embarazo_simple$Perim_cef, kernel='gaussian'),col='green')
 lines(density(embarazo_multiple$Perim_cef, kernel='gaussian'),col='blue')
 legend("topleft", legend = c("Embarazo Simple", "Embarazo Multiple"), col = c("green", "blue"), lty = 1, lwd = 2)
@@ -102,6 +102,7 @@ Vemos que la distribución del perímetro cefálico de los bebés que provienen 
 
 ##Ejercicio 6
 ```{r,echo=TRUE}
+library(aplpack)
 bagplot(Perim_cef, Talla, xlab='Perim_cef', ylab='Talla')
 ```
 Tenemos datos atípicos con valores muy bajos de "perímetro encefálico", pero cuando esto sucede, la "talla" se encuentra en el rango esperable. Por otro lado, tenemos datos atípicos con valores muy altos y muy bajos de la "talla" pero, de la misma forma, cuando esto sucede, el "perímetro encefálico" se encuentra en el rango esperable. También tenemos datos con perímetro encefálico alto y talla baja, y también con perímetro encefálico mediano y talla alta y baja, que son atípicos en cuanto a la variable múltiple, pero no son atípicos en las variables por separado.
@@ -116,8 +117,8 @@ Ya no se visualizan datos atípicos. Esto ocurre porque los outliers dependían 
 
 ## Ejercicio 8
 ```{r,echo=TRUE}
-data_mujer <- data[data$Sexo=='Mujer',]
-data_varon <- data[data$Sexo=='Varon',]
+data_mujer <- data[Sexo=='Mujer',]
+data_varon <- data[Sexo=='Varon',]
 bagplot(data_mujer$Perim_cef, data_mujer$Talla, main="Mujer", xlab='Perim_cef', ylab='Talla')
 bagplot(data_varon$Perim_cef, data_varon$Talla, main="Varon", xlab='Perim_cef', ylab='Talla')
 ```
