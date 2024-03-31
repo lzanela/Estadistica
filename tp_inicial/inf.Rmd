@@ -85,3 +85,9 @@ legend("topleft", legend = c("Embarazo Simple", "Embarazo Multiple"), col = c("g
 ```
 
 Vemos que la distribución del perímetro cefálico de los bebés que provienen de un embarazo simple está más corrida hacia la derecha de los que provienen de un embarazo múltiple. Por lo tanto, podemos inferir que los primeros tienden a tener mayor perímetro cefálico 
+
+##Ejercicio 6
+```{r,echo=TRUE}
+bagplot(Perim_cef, Talla, xlab='Perim_cef', ylab='Talla')
+```
+Tenemos datos atípicos con valores muy bajos de "perímetro encefálico", pero cuando esto sucede, la "talla" se encuentra en el rango esperable. Por otro lado, tenemos datos atípicos con valores muy altos y muy bajos de la "talla" pero, de la misma forma, cuando esto sucede, el "perímetro encefálico" se encuentra en el rango esperable. En conclusión no encontramos datos atípicos de las dos variables a la vez, sino o bien del "perímetro encefálico" (con valores atípicamente bajos), o bien de la "talla" (con valores atípicamente tanto bajos como altos) de forma independiente.
