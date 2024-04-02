@@ -73,7 +73,7 @@ ggplot() +
   geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'gaussian'), kernel = "gaussian", adjust = 2)
 ```
 
-##Ejercicio 4 
+## Ejercicio 4
 
 ```{r,echo=TRUE}
 hist(Perim_cef,breaks = 25,freq = FALSE)
@@ -84,10 +84,11 @@ lines(density(sexoVaron$Perim_cef, kernel='gaussian'),col='green')
 lines(density(sexoMujer$Perim_cef, kernel='gaussian'),col='blue')
 legend("topleft", legend = c("Sexo Varon", "Sexo Mujer"), col = c("green", "blue"), lty = 1, lwd = 2)
 ```
-Podemos observar que la curva de densidad de los varones está corrida hacia la derecha con respecto a la curva de la densidad conjunta, lo que indica valores en general más grandes. La curva de las mujeres está desplazada hacia la izquierda con respecto a la curva de densidad conjunta. Podemos concluir que, en general, el perímetro cefálico de los varones es mayor que el de las mujeres.
 
+Podemos observar que la curva de densidad de los varones está corrida hacia la derecha con respecto a la curva de la densidad de ambos sexos, lo que indica valores en general más grandes. A su vez, la curva de las mujeres está desplazada hacia la izquierda con respecto a la curva de densidad de ambos sexos. Podemos concluir que, en general, el perímetro cefálico de los varones es mayor que el de las mujeres.
 
-##Ejercicio 5
+## Ejercicio 5
+
 ```{r,echo=TRUE}
 hist(Perim_cef, breaks=25, freq=FALSE)
 lines(density(Perim_cef, kernel='gaussian'))
@@ -98,28 +99,34 @@ lines(density(embarazo_multiple$Perim_cef, kernel='gaussian'),col='blue')
 legend("topleft", legend = c("Embarazo Simple", "Embarazo Multiple"), col = c("green", "blue"), lty = 1, lwd = 2)
 ```
 
-Vemos que la distribución del perímetro cefálico de los bebés que provienen de un embarazo simple está más corrida hacia la derecha de los que provienen de un embarazo múltiple. Por lo tanto, podemos inferir que los primeros tienden a tener mayor perímetro cefálico 
+Vemos que la distribución del perímetro cefálico de los bebés que provienen de un embarazo simple está más corrida hacia la derecha de los que provienen de un embarazo múltiple, y al mismo tiempo se encuentra más concentrada alrededor de los 47cm aproximadamente. Por lo tanto, podemos inferir que los primeros tienden a tener mayor perímetro cefálico, y menor variabilidad en dicha variable.
 
-##Ejercicio 6
+## Ejercicio 6
+
 ```{r,echo=TRUE}
 library(aplpack)
 bagplot(Perim_cef, Talla, xlab='Perim_cef', ylab='Talla')
 ```
-Tenemos datos atípicos con valores muy bajos de "perímetro encefálico", pero cuando esto sucede, la "talla" se encuentra en el rango esperable. Por otro lado, tenemos datos atípicos con valores muy altos y muy bajos de la "talla" pero, de la misma forma, cuando esto sucede, el "perímetro encefálico" se encuentra en el rango esperable. También tenemos datos con perímetro encefálico alto y talla baja, y también con perímetro encefálico mediano y talla alta y baja, que son atípicos en cuanto a la variable múltiple, pero no son atípicos en las variables por separado.
 
-##Ejercicio 7
+Tenemos datos atípicos con valores muy bajos de "perímetro encefálico", pero cuando esto sucede, la "talla" se encuentra en el rango esperable. Por otro lado, tenemos datos atípicos con valores muy altos y muy bajos de la "talla" pero, de la misma forma, cuando esto sucede, el "perímetro encefálico" se encuentra en el rango esperable. También tenemos datos con perímetro encefálico alto y talla baja, y también con perímetro encefálico mediano y talla alta y baja, que son atípicos en cuanto a la variable múltiple, pero no son atípicos en las variables por separado. Podemos concluir que no es común la presencia de individuos con ambas variables fuera de sus respectivos rangos esperados: en los casos en que una de las variables toma valores atípicos, la otra se encuentra dentro del rango esperado.
+
+## Ejercicio 7
+
 ```{r,echo=TRUE}
-perim_cef_out <- boxplot.stats(Perim_cef)$out
-talla_out <- boxplot.stats(Talla)$out
-bagplot(Perim_cef[!Perim_cef %in% perim_cef_out], Talla[!Talla %in% talla_out], xlab='Perim_cef', ylab='Talla')
+outliers <- bagplot(Perim_cef, Talla, create.plot = FALSE, xlab='Perim_cef', ylab='Talla')$pxy.outlier
+
+bagplot(Perim_cef[!Perim_cef %in% outliers[1:107] | !Talla %in% outliers[108:214]], Talla[!Perim_cef %in% outliers[1:107] | !Talla %in% outliers[108:214]], xlab='Perim_cef', ylab='Talla')
 ```
-Ya no se visualizan datos atípicos. Esto ocurre porque los outliers dependían de forma independiente de cada variable, tal como se explicó en el ejercicio anterior. Entonces, al eliminar los outliers de cada variable por separado, se eliminan los outliers de la variable múltiple.
+
+Se visualizan menos datos atípicos (fuera del polígono celeste). Viendo que los outliers forman una recta diagonal por encima del polígono celeste (loop) podemos inferir que existe una relación lineal entre las variables "Perímetro encefálico" y "Talla" de dichos valores.
 
 ## Ejercicio 8
+
 ```{r,echo=TRUE}
 data_mujer <- data[Sexo=='Mujer',]
 data_varon <- data[Sexo=='Varon',]
 bagplot(data_mujer$Perim_cef, data_mujer$Talla, main="Mujer", xlab='Perim_cef', ylab='Talla')
 bagplot(data_varon$Perim_cef, data_varon$Talla, main="Varon", xlab='Perim_cef', ylab='Talla')
 ```
-Sí, se observan los mismos datos atípicos que en el item 6. Interpretamos que que la variable sexo no tiene incidencia sobre los outliers variable múltiple conformada por el perímetro encefálico y la talla. Por otro lado, sí vemos que el perímetro cefálico tiene valores esperados más bajos en mujeres que en varones, como en el ejercicio 4. 
+
+Sí, se observan los mismos datos atípicos que en el item 6. Interpretamos que que la variable sexo no tiene incidencia sobre los outliers variable múltiple conformada por el perímetro encefálico y la talla. Por otro lado, sí vemos que el perímetro cefálico tiene valores esperados más bajos en mujeres que en varones, como en el ejercicio 4.
