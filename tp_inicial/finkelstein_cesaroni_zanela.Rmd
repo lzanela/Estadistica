@@ -30,11 +30,42 @@ Como se observa en el gráfico, las densidades estimadas casi no presentan difer
 #### a) Estimación usando el histograma
 
 ```{r,echo=TRUE}
-data_range <- seq(floor(min(Perim_cef)), ceiling(max(Perim_cef)), by = 1)
+data_range <- seq(floor(min(Perim_cef)), ceiling(max(Perim_cef)) + 1, by = 1.5)
 hist_obj <- hist(Perim_cef, breaks = data_range, plot = FALSE)
+
+# Ploteo el histograma
+plot(hist_obj, col=gray(0.95), main="Histograma de Perim_cef con area en [42, 48]", xlab="Perim_cef", ylab="Frecuencia")
+
+# Calculo los bin widths
 bin_widths <- diff(hist_obj$breaks)
-in_range_indices <- which(hist_obj$mids >= 42 & hist_obj$mids <= 48)
-sum(hist_obj$density[in_range_indices] * bin_widths[in_range_indices])
+
+# Busco índices de los bins que tienen alguno de sus bordes entre 42 y 48
+in_range_indices <- which(hist_obj$breaks[-length(hist_obj$breaks)] <= 48 & hist_obj$breaks[-1] >= 42)
+
+# Resalto el área entre [42, 48]
+for (i in in_range_indices) {
+  left <- max(hist_obj$breaks[i], 42)
+  right <- min(hist_obj$breaks[i + 1], 48)
+  rect(left, 0, right, hist_obj$counts[i], col = rgb(0.12, 0.56, 1, 0.5), border = NA)
+}
+axis(1, at = c(42, 48), labels = c(42, 48), las = 2)
+
+# Calculo el área de los bins que están totalmente en rango (ambos bordes)
+middle_bins <- hist_obj$density[in_range_indices[-c(1, length(in_range_indices))]]
+middle_area <- sum(middle_bins * bin_widths[in_range_indices[-c(1, length(in_range_indices))]])
+
+# Área parcial del primer bin en rango
+first_bin_width = hist_obj$breaks[in_range_indices[1] + 1] - 42
+first_area = first_bin_width * hist_obj$density[in_range_indices[1]]
+
+# Área parcial del último bin en rango
+last_bin_width = 48 - hist_obj$breaks[in_range_indices[length(in_range_indices)]]
+last_area = last_bin_width * hist_obj$density[in_range_indices[length(in_range_indices)]]
+
+# Sumo las áreas
+total_area = first_area + middle_area + last_area
+
+cat("Área total:", total_area, "\n")
 ```
 
 #### b) Estimación usando la densidad con núcleo de Epanechnikov
