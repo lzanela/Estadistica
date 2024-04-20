@@ -54,6 +54,17 @@ Averiguamos las ventanas por defecto para cada núcleo (el parámetro $bw$). Seg
 ```{r,echo=TRUE}
 print(bw.nrd0(Perim_cef))
 ```
+Con las ventanas por defecto se obtienen las siguientes densidades
+
+```{r,echo=TRUE}
+library(ggplot2)
+
+ggplot() +
+  geom_histogram(aes(x = Perim_cef, y = after_stat(density)), binwidth = 1) +
+  geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'rectangular'), kernel = "rectangular") +
+  geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'epanechnikov'), kernel = "epanechnikov") +
+  geom_density(aes(x = Perim_cef, y = after_stat(density), col = 'gaussian'), kernel = "gaussian")
+```
 
 Reduciendo la ventana a la mitad se obtienen las siguientes densidades (núcleo rectangular graficado en verde):
 
