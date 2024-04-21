@@ -155,7 +155,14 @@ Tenemos datos atípicos con valores muy bajos de "perímetro encefálico", pero 
 ## Ejercicio 7
 
 ```{r,echo=TRUE}
+# `pxy.outlier` devuelve un array contiguo que contiene los outliers de dos variables distintas.
+# Los primeros 107 elementos del array representan los outliers de la variable `Perim_cef`.
+# Los últimos 107 elementos corresponden a los outliers de la variable `Talla`.
 outliers <- bagplot(Perim_cef, Talla, create.plot = FALSE, xlab='Perim_cef', ylab='Talla')$pxy.outlier
+
+# El objetivo es asegurar la consistencia en el tamaño de los grupos de outliers.
+# Para ello, se filtran los outliers de modo que si un dato es considerado outlier en cualquiera de las variables,se eliminará de ambos grupos para mantener una correspondencia en el tamaño de los conjuntos.
+
 
 bagplot(Perim_cef[!Perim_cef %in% outliers[1:107] | !Talla %in% outliers[108:214]], Talla[!Perim_cef %in% outliers[1:107] | !Talla %in% outliers[108:214]], xlab='Perim_cef', ylab='Talla')
 ```
