@@ -1,0 +1,33 @@
+---
+title: "Estadística - TP Final"
+author: "Cesaroni, Finkelstein, Zanela"
+date: "2024-07-10"
+output: pdf_document
+---
+
+## Ejercicio 1
+
+$$
+(X_i, Y_i) \sim (X, Y), \quad \text{donde } X, Y \in \mathbb{R} \text{ y } E(Y \mid X = x) = m(x),
+$$ con $m: \mathbb{R} \rightarrow \mathbb{R}$ suave, $K$ núcleo que satisface las propiedades a)-e) $h \in \mathbb{R}$ ventana, sea el estimador de Nadaraya–Watson de $m$ dado por $$
+\hat{m}_h(x) = \sum_{i=1}^n Y_i \frac{K\left(\frac{X_i - x}{h}\right)}{\sum_{\ell=1}^n K\left(\frac{X_\ell - x}{h}\right)} = \sum_{j=1}^n Y_i w_{i,h}(x). \tag{1}
+$$ Llamemos $\mathbf{Y}$ al vector de respuestas con $i$-ésima componente dada por $Y_i$.
+
+$(a)$ $\hat{Y}_i = \hat{m}_h(X_i)$ y sea $\hat{Y}$ el vector de predichos donde la $i$-ésima componente es $\hat{Y}_i$. Queremos ver que $\hat{Y} = SY$, es decir, que se trata de una transformación lineal en $Y$, y hallar una expresión para $S$ definiendo claramente cada una de sus componentes:
+
+Como $$\hat{m}_h(x) = \sum_{j=1}^n Y_i w_{i,h}(x) = $$
+
+$$ \hat{\mathbf{Y}} = 
+\begin{pmatrix}
+\hat{m}_h(X_1) \\
+\hat{m}_h(X_2) \\
+\vdots \\
+\hat{m}_h(X_n)
+\end{pmatrix} =
+\begin{pmatrix}
+\sum_{j=1}^n Y_i w_{i,h}(X_1) \\
+\sum_{j=1}^n Y_i w_{i,h}(X_2) \\
+\vdots \\
+\sum_{j=1}^n Y_i w_{i,h}(X_n)
+\end{pmatrix}
+$$
