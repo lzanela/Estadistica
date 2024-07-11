@@ -31,3 +31,17 @@ $$ \hat{\mathbf{Y}} =
 \sum_{j=1}^n Y_i w_{i,h}(X_n)
 \end{pmatrix}
 $$
+
+## Ejercicio 2
+```{r,echo=TRUE}
+individuals <- read.table("individuals.csv", header = TRUE, sep = ";")
+
+datos_femenino <- subset(individuals, SEX == 2 & HIP.CIRCUMFERENCE != 0 & BUTTOCK.KNEE.LENGTH!=0)
+
+plot(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$BUTTOCK.KNEE.LENGTH,
+     xlab = "HIP.CIRCUMFERENCE",
+     ylab = "BUTTOCK.KNEE.LENGTH",
+     main = "HIP.CIRCUMFERENCE vs. BUTTOCK.KNEE.LENGTH",
+     pch = 19, col = "blue")
+```
+Este gráfico sugiere que la longitud del fémur y el perímetro de la cadera están relacionados de forma monotónicamente creciente. Cuanto mayor es la la circunferencia de la cadera, mayor es la longitud del fémur.
