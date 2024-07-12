@@ -5,7 +5,10 @@ date: "2024-07-10"
 output: pdf_document
 ---
 
-## Ejercicio 1
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1234) 
+```
 
 $$
 (X_i, Y_i) \sim (X, Y), \quad \text{donde } X, Y \in \mathbb{R} \text{ y } E(Y \mid X = x) = m(x),
@@ -49,6 +52,38 @@ plot(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH,
 ```
 
 Este gráfico sugiere que la longitud del fémur y el perímetro de la cadera están relacionados de forma monotónicamente creciente. Cuanto mayor es la la circunferencia de la cadera, mayor es la longitud del fémur.
+
+#### (b)
+
+```{r}
+
+# Division de grupos etarios por cuartiles
+cuartiles <- quantile(datos_femenino$AGE.IN.MONTHS,probs = c(0,0.25, 0.5, 0.75,1))
+datos_femenino$AGE.GROUP <- cut(datos_femenino$AGE.IN.MONTHS,cuartiles,include.lowest = TRUE, labels = c("0-81","82-128","129-168","169, +"))
+#Estimacion de medianas 
+medianas_estimadas <- tapply(datos_femenino$HIP.CIRCUMFERENCE,datos_femenino$AGE.GROUP,median)
+
+
+# Funcion para estimacion del Se de las medianas
+
+estimar_se_mediana <- function (x, B = 1000){
+  titahatboot <- rep(0,B)
+  for(i in 1:B){
+    Xboot <- sample(x,length(x),replace = TRUE)
+    titahatboot[i] <- median(Xboot)
+  }
+  return(sqrt(mean((titahatboot - mean(titahatboot))^2)))
+}
+
+# Calculo intervalo bootstrap nivel 0.95
+
+intervalos_confianza <- tapply(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$AGE.GROUP, function(x){
+  se_boot <- estimar_se_mediana(x)
+  intervalo_boot <- c(median(x) - 1.96*se_boot,median(x) + 1.96*se_boot)
+  return(intervalo_boot)
+})
+
+```
 
 #### (c)
 ##### i)
