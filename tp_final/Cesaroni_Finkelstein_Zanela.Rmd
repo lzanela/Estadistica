@@ -8,6 +8,7 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 set.seed(1234) 
+library(ggplot2)
 ```
 
 $$
@@ -60,11 +61,12 @@ Este gráfico sugiere que la longitud del fémur y el perímetro de la cadera es
 # Division de grupos etarios por cuartiles
 cuartiles <- quantile(datos_femenino$AGE.IN.MONTHS,probs = c(0,0.25, 0.5, 0.75,1))
 datos_femenino$AGE.GROUP <- cut(datos_femenino$AGE.IN.MONTHS,cuartiles,include.lowest = TRUE, labels = c("0-81","82-128","129-168","169, +"))
+
 #Estimacion de medianas 
 medianas_estimadas <- tapply(datos_femenino$HIP.CIRCUMFERENCE,datos_femenino$AGE.GROUP,median)
 
 
-# Funcion para estimacion del Se de las medianas
+# Función para estimación del se de las medianas
 
 estimar_se_mediana <- function (x, B = 1000){
   titahatboot <- rep(0,B)
@@ -75,7 +77,7 @@ estimar_se_mediana <- function (x, B = 1000){
   return(sqrt(mean((titahatboot - mean(titahatboot))^2)))
 }
 
-# Calculo intervalo bootstrap nivel 0.95
+# Cálculo de intervalo bootstrap nivel 0.95
 
 intervalos_confianza <- tapply(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$AGE.GROUP, function(x){
   se_boot <- estimar_se_mediana(x)
@@ -83,7 +85,44 @@ intervalos_confianza <- tapply(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$
   return(intervalo_boot)
 })
 
+
+# Gráfico
+
+# Los siguientes data frames son unicamente creados para generar el plot
+
+df_medianas <- data.frame(
+  AGE.GROUP = names(medianas_estimadas),
+  MEDIAN = medianas_estimadas
+)
+df_intervalos <- data.frame(
+  AGE.GROUP = names(intervalos_confianza),
+  INTERVAL = intervalos_confianza
+)
+df_intervalos$LOWER <- sapply(df_intervalos$INTERVAL, function(x) x[1])
+df_intervalos$UPPER <- sapply(df_intervalos$INTERVAL, function(x) x[2])
+
+df_plot <- merge(datos_femenino,merge(df_medianas,df_intervalos,by="AGE.GROUP"),
+                 by="AGE.GROUP")
+
+
+ggplot(df_plot, aes(x = AGE.GROUP, y = MEDIAN)) +
+  geom_point(size = 2) +  
+  geom_errorbar(aes(ymin = LOWER, ymax = UPPER), width = 0.2, size = 1) + 
+  scale_y_continuous(limits = c(min(df_plot$LOWER) * 0.95, max(df_plot$UPPER)),
+                     breaks = seq(from = 600, to = 1000, by = 50)) + 
+  labs(title = "Intervalos de Confianza de medianas de HIP.CIRCUMFERENCE\npor grupo etario",
+       x = "Grupo Etario", y = "HIP.CIRCUMFERENCE") +
+  theme_minimal() + theme(
+        plot.title = element_text(hjust = 0.5, face = "bold", size = 14,
+                                  margin = margin(10, 0, 10, 0)),  
+        axis.title = element_text(size = 14)) 
 ```
+
+Para calcular los intervalos mencionados, utilizamos el método de intervalo de bootstrap normal. Necesitamos el error estándar de la mediana, el cual obtenemos mediante una estimación bootstrap con la función `estimar_se_mediana`. Esta función realiza un muestreo `B` veces con reposición de HIP.CIRCUMFERENCE y calcula la mediana de estos datos, almacenándolos en un vector. Una vez que tenemos el vector con las `B` medianas calculadas, calculamos el error estándar de la siguiente manera:
+
+$$\sqrt{\frac{1}{n} \sum \left((\hat{se}_{\text{boot}} - \overline{\hat{se}_{\text{boot}}})^2\right)}$$
+Y este procedimiento lo hacemos por cada grupo etario.
+
 
 #### (c)
 ##### i)
