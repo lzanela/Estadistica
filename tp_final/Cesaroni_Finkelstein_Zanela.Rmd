@@ -33,15 +33,43 @@ $$ \hat{\mathbf{Y}} =
 $$
 
 ## Ejercicio 2
+
+#### (a)
+
 ```{r,echo=TRUE}
 individuals <- read.table("individuals.csv", header = TRUE, sep = ";")
-
 datos_femenino <- subset(individuals, SEX == 2 & HIP.CIRCUMFERENCE != 0 & BUTTOCK.KNEE.LENGTH!=0)
+attach(datos_femenino)
 
-plot(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$BUTTOCK.KNEE.LENGTH,
+plot(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH,
      xlab = "HIP.CIRCUMFERENCE",
      ylab = "BUTTOCK.KNEE.LENGTH",
      main = "HIP.CIRCUMFERENCE vs. BUTTOCK.KNEE.LENGTH",
      pch = 19, col = "blue")
 ```
+
 Este gráfico sugiere que la longitud del fémur y el perímetro de la cadera están relacionados de forma monotónicamente creciente. Cuanto mayor es la la circunferencia de la cadera, mayor es la longitud del fémur.
+
+#### (c)
+##### i)
+
+```{r,echo=TRUE}
+regresion_100 <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal", bandwidth = 100)
+regresion_50 <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal", bandwidth = 50)
+
+
+plot(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$BUTTOCK.KNEE.LENGTH,
+     xlab = "HIP.CIRCUMFERENCE",
+     ylab = "BUTTOCK.KNEE.LENGTH",
+     main = "HIP.CIRCUMFERENCE vs. BUTTOCK.KNEE.LENGTH",
+     pch = 19, col = "light blue")
+
+lines(regresion_100, col = "red")
+lines(regresion_50, col = "purple")
+
+legend("bottomright", legend = c("Ventana 100", "Ventana 50"), col = c("red", "purple"), lty = 1, cex = 0.8)
+
+```
+El gráfico muestra que la ventana de 100 suaviza la regresión y es menos sensible a los outliers, mientras que la ventana de 50 ajusta mejor los datos en la parte inferior izquierda, evitando que los valores altos afecten las predicciones de los valores más bajos. Usaríamos la ventana de 50, puesto tiene un mejor ajuste a los datos con valores bajos de HIP.CIRCUMFERENCE y no pareciera estar suficientemente errada en los datos con valores altos de HIP.CIRCUMFERENCE como para que valga más la pena elegir la ventana de 100.
+
+##### ii)
