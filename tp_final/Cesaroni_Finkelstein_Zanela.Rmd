@@ -120,11 +120,10 @@ ggplot(df_plot, aes(x = AGE.GROUP, y = MEDIAN)) +
 
 Para calcular los intervalos mencionados, utilizamos el método de intervalo de bootstrap normal. Necesitamos el error estándar de la mediana, el cual obtenemos mediante una estimación bootstrap con la función `estimar_se_mediana`. Esta función realiza un muestreo `B` veces con reposición de HIP.CIRCUMFERENCE y calcula la mediana de estos datos, almacenándolos en un vector. Una vez que tenemos el vector con las `B` medianas calculadas, calculamos el error estándar de la siguiente manera:
 
-$$\sqrt{\frac{1}{n} \sum \left((\hat{se}_{\text{boot}} - \overline{\hat{se}_{\text{boot}}})^2\right)}$$
-Y este procedimiento lo hacemos por cada grupo etario.
-
+$$\sqrt{\frac{1}{n} \sum \left((\hat{se}_{\text{boot}} - \overline{\hat{se}_{\text{boot}}})^2\right)}$$ Y este procedimiento lo hacemos por cada grupo etario.
 
 #### (c)
+
 ##### i)
 
 ```{r,echo=TRUE}
@@ -262,7 +261,6 @@ lines(HIP.CIRCUMFERENCE[ordenado], nwfit, col = "red")
 
 Al utilizar la misma grilla que en el ítem anterior, obtuvimos 20 como *bandwidth* óptimo, por lo que agrandamos la grilla para considerar ventanas más chicas. Además, teniendo en cuenta que las operaciones del *leave-one-out-cv*, basadas en el ítem teórico, están vectorizadas, como esto conlleva un menor costo computacional, podemos ampliar la grilla sin problemas.
 
-
 ##### iv)
 
 ```{r}
@@ -287,3 +285,19 @@ legend("bottomright", legend = c("ksmooth(41)", "nwsmooth(15)", "lm"), col = c("
 
 ```
 
+#### (d)
+
+##### i)
+
+```{r,echo=TRUE}
+linearsmooth <- function(x, X_data, Y_data, h){
+  X <- matrix(0, nrow=length(X_data), ncol=2)
+  X[,1] <- 1
+  X[,2] <- X_data - x
+  W <- diag((X_data-x)/h)
+  Y <- Y_data
+  mean_sq_est <- solve(t(X)%*%W%*%X)%*%t(X)%*%W%*%Y
+  
+  return(mean_sq_est[1])
+}
+```
