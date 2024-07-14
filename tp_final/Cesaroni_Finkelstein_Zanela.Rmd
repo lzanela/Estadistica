@@ -10,6 +10,11 @@ header-includes:
   - \usepackage{amsthm}
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1234) 
+library(ggplot2)
+```
 # 1. Teórico
 
 $$
