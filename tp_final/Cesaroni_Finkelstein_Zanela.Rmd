@@ -291,13 +291,46 @@ legend("bottomright", legend = c("ksmooth(41)", "nwsmooth(15)", "lm"), col = c("
 
 ```{r,echo=TRUE}
 linearsmooth <- function(x, X_data, Y_data, h){
-  X <- matrix(0, nrow=length(X_data), ncol=2)
-  X[,1] <- 1
-  X[,2] <- X_data - x
-  W <- diag((X_data-x)/h)
-  Y <- Y_data
-  mean_sq_est <- solve(t(X)%*%W%*%X)%*%t(X)%*%W%*%Y
+  K <- function(u) dnorm(u)
+  y_est <- rep(NA, length(X_data)) 
+  for(i in 1:length(x)){
+    X <- matrix(0, nrow=length(X_data), ncol=2)
+    X[,1] <- 1
+    X[,2] <- X_data - x[i]
+    W <- diag(K((X_data-x[i])/h))
+    Y <- Y_data
+    inv <- solve(t(X)%*%W%*%X)
+    mean_sq_est <- inv%*%t(X)%*%W%*%Y
+    y_est[i] <- mean_sq_est[1]
+  }
   
-  return(mean_sq_est[1])
+  return(y_est)
 }
 ```
+
+##### ii)
+
+```{r,echo=TRUE}
+reg_est <- linearsmooth(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$BUTTOCK.KNEE.LENGTH, 40)
+reg_est <- sort(reg_est)
+```
+
+##### iii)
+
+```{r,echo=TRUE}
+y <- sort(datos_femenino$BUTTOCK.KNEE.LENGTH)
+x <- sort(datos_femenino$HIP.CIRCUMFERENCE)
+plot(x, y,
+     main = "Comparación de estimadores",
+     xlab = "HIP.CIRCUMFERENCE",
+     ylab = "BUTTOCK.KNEE.LENGTH")
+
+# Agregar los estimadores al gráfico
+lines(x, nwfit, col = "red", lwd = 3)
+lines(x, reg_est, col = "blue", lwd = 3)
+
+legend("topleft", legend = c("Nadaraya-Watson", "Regresión local"),
+       col = c("red", "blue"), lty = 1, lwd = 2)
+```
+
+Podemos ver que el estimador de Nadaraya-Watson tiene más volatilidad, y esto se debe a que la ventana óptima de este es más pequeña que la del estimador de regresión local. Por otro lado, en los puntos de la izquierda vemos que el estimador de Nadaraya-Watson tiene un sesgo mayor, y esto se debe a que los valores de "y" con los que se ajusta el estimador son casi todos mayores a los valores verdaderos de ese sector. Este sesgo inherente al estimador de Nadaraya-Watson se intenta mejorar con el estimador de regresión local. Vemos esa mejoría en el sector izquierdo, aunque no se percibe en el derecho. Más allá de eso, los dos estimadores son bastente similares visualmente.
