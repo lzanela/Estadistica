@@ -30,7 +30,8 @@ $\hat{Y}_i = \hat{m}_h(X_i)$ y sea $\hat{Y}$ el vector de predichos donde la $i$
 
 Queremos ver que $\hat{Y} = SY$:
 
-Como $$\hat{m}_h(x) = \sum_{i=1}^n Y_i w_{i,h}(x) = 
+Como $$
+\hat{m}_h(x) = \sum_{i=1}^n Y_i w_{i,h}(x) = 
 \begin{pmatrix}
 w_{1,h}(x) & w_{2,h}(x) & \dots & w_{n,h}(x)
 \end{pmatrix}
@@ -40,11 +41,11 @@ Y_1 \\
 Y_2 \\ 
 \vdots \\
 Y_n
-\end{pmatrix} $$
+\end{pmatrix}
+$$
 
-$\implies$
-
-$$ \hat{\mathbf{Y}} = \begin{pmatrix}
+$\implies$ $$
+\hat{\mathbf{Y}} = \begin{pmatrix}
 \hat{m}_h(X_1) \\
 \hat{m}_h(X_2) \\
 \vdots \\
@@ -68,9 +69,8 @@ Y_2 \\
 \vdots \\
 Y_n
 \end{pmatrix}
-}_{Y} $$ $\implies$
-
-$$
+}_{Y} 
+$$ $\implies$ $$
 \hat{\mathbf{Y}} = S \cdot Y
 $$
 
@@ -80,42 +80,41 @@ $$
 
 Queremos ver que $\hat{m}_{h}^{(-i)}(X_i) = \frac{\hat{m}_h(X_i) - Y_i w_{i,h}(X_i)}{1 - w_{i,h}(X_i)}$
 
-Observamos en primer lugar que $$\begin{align*}
+Observamos en primer lugar que $$\begin{aligned}
 \hat{m}_h(X_i) - Y_i w_{i,h}(X_i) &= \sum_{j=1}^n Y_j w_{j,h}(X_i) - Y_i w_{i,h}(X_i) \\
 &= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j w_{j,h}(X_j) \\
 &= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \frac{K\left(\frac{X_j - X_i}{h}\right)}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \\
 &= \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right)
-\end{align*} 
-$$
-
-Por otro lado, $$ \begin{align*}
+\end{aligned} 
+$$ Por otro lado, $$ 
+\begin{aligned}
 \frac{1}{1-w_{i,h}(X_i)} \cdot \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} 
 &= \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right) - \frac{K\left(\frac{X_i - X_i}{h}\right)}{{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)}} \cdot \sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \\
 &= \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right) - K\left(\frac{X_i - X_i}{h}\right)} \\
 &= \frac{1}{\sum_{\substack{\ell=1 \\ \ell \neq i}}^n K\left(\frac{X_\ell - X_i}{h}\right)}
-\end{align*}
+\end{aligned}
 $$
 
-Luego, $$ \begin{align*}
+Luego, $$ 
+\begin{aligned}
 \frac{\hat{m}_h(X_i) - Y_i w_{i,h}(X_i)}{1 - w_{i,h}(X_i)} &= \frac{1}{1-w_{i,h}(X_i)} \cdot \left( \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right) \right) \\
 &= \left( \frac{1}{1-w_{i,h}(X_i)} \cdot \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \right) \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right) \\
 &= \frac{1}{\sum_{\substack{\ell=1 \\ \ell \neq i}}^n K\left(\frac{X_\ell - X_i}{h}\right)} \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right) \\
 &= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \frac{K\left(\frac{X_j - X_i}{h}\right)}{\sum_{\substack{\ell=1 \\ \ell \neq i}}^n K\left(\frac{X_\ell - X_i}{h}\right)} \\
 &= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, w_{j,h}^{-i}(X_i) \\
 &= \hat{m}_{h}^{(-i)}(X_i)
-\end{align*} 
+\end{aligned} 
 $$
 
 ##### (ii)
 
-Vemos que $CV(h) = \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - \hat{m}_h(X_i))^2}{1 - w_{i,h}(X_i)}$
-
-$$ \begin{align*}
+Vemos que $CV(h) = \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - \hat{m}_h(X_i))^2}{1 - w_{i,h}(X_i)}$ $$ 
+\begin{aligned}
 CV(h) &= \frac{1}{n} \sum_{i=1}^n (Y_i - \hat{m}_h^{-i}(X_i))^2 \\
 &= \frac{1}{n} \sum_{i=1}^n (Y_i - \frac{\hat{m}_h(X_i) - Y_i w_{i,h}(X_i)}{1 - w_{i,h}(X_i)})^2 \\
 &= \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - Y_i w_{i,h}(X_i) - \hat{m}_h(X_i) + Y_i w_{i,h}(X_i))^2}{(1 - w_{i,h}(X_i))^2} \\
 &= \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - \hat{m}_h(X_i))^2}{(1 - w_{i,h}(X_i))^2}
-\end{align*}
+\end{aligned}
 $$
 
 ## Ejercicio 2
@@ -124,7 +123,8 @@ $$
 
 ```{r,echo=TRUE}
 individuals <- read.table("individuals.csv", header = TRUE, sep = ";")
-datos_femenino <- subset(individuals, SEX == 2 & HIP.CIRCUMFERENCE != 0 & BUTTOCK.KNEE.LENGTH!=0)
+datos_femenino <- subset(individuals, SEX == 2 & HIP.CIRCUMFERENCE != 0
+                         & BUTTOCK.KNEE.LENGTH!=0)
 attach(datos_femenino)
 
 plot(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH,
@@ -142,10 +142,13 @@ Este gráfico sugiere que la longitud del fémur y el perímetro de la cadera es
 
 # Division de grupos etarios por cuartiles
 cuartiles <- quantile(datos_femenino$AGE.IN.MONTHS,probs = c(0,0.25, 0.5, 0.75,1))
-datos_femenino$AGE.GROUP <- cut(datos_femenino$AGE.IN.MONTHS,cuartiles,include.lowest = TRUE, labels = c("0-81","82-128","129-168","169, +"))
+datos_femenino$AGE.GROUP <- cut(datos_femenino$AGE.IN.MONTHS,cuartiles,
+                                include.lowest = TRUE, 
+                                labels = c("0-81","82-128","129-168","169, +"))
 
 #Estimacion de medianas 
-medianas_estimadas <- tapply(datos_femenino$HIP.CIRCUMFERENCE,datos_femenino$AGE.GROUP,median)
+medianas_estimadas <- tapply(datos_femenino$HIP.CIRCUMFERENCE,
+                             datos_femenino$AGE.GROUP,median)
 
 
 # Función para estimación del se de las medianas
@@ -161,7 +164,9 @@ estimar_se_mediana <- function (x, B = 1000){
 
 # Cálculo de intervalo bootstrap nivel 0.95
 
-intervalos_confianza <- tapply(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$AGE.GROUP, function(x){
+intervalos_confianza <- tapply(datos_femenino$HIP.CIRCUMFERENCE,
+                               datos_femenino$AGE.GROUP,
+                               function(x){
   se_boot <- estimar_se_mediana(x)
   intervalo_boot <- c(median(x) - 1.96*se_boot,median(x) + 1.96*se_boot)
   return(intervalo_boot)
@@ -192,7 +197,8 @@ ggplot(df_plot, aes(x = AGE.GROUP, y = MEDIAN)) +
   geom_errorbar(aes(ymin = LOWER, ymax = UPPER), width = 0.2, linewidth = 1) + 
   scale_y_continuous(limits = c(min(df_plot$LOWER) * 0.95, max(df_plot$UPPER)),
                      breaks = seq(from = 600, to = 1000, by = 50)) + 
-  labs(title = "Intervalos de Confianza de medianas de HIP.CIRCUMFERENCE\npor grupo etario",
+  labs(
+    title = "Intervalos de Confianza de medianas de HIP.CIRCUMFERENCE\npor grupo etario",
        x = "Grupo Etario", y = "HIP.CIRCUMFERENCE") +
   theme_minimal() + theme(
         plot.title = element_text(hjust = 0.5, face = "bold", size = 14,
@@ -209,7 +215,8 @@ $$\sqrt{\frac{1}{n} \sum \left((\hat{se}_{\text{boot}} - \overline{\hat{se}_{\te
 ##### i)
 
 ```{r,echo=TRUE}
-regresion_100 <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal", bandwidth = 100)
+regresion_100 <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal",
+                         bandwidth = 100)
 regresion_50 <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal", bandwidth = 50)
 
 
@@ -222,7 +229,8 @@ plot(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$BUTTOCK.KNEE.LENGTH,
 lines(regresion_100, col = "red")
 lines(regresion_50, col = "purple")
 
-legend("bottomright", legend = c("Ventana 100", "Ventana 50"), col = c("red", "purple"), lty = 1, cex = 0.8)
+legend("bottomright", legend = c("Ventana 100", "Ventana 50"),
+       col = c("red", "purple"), lty = 1, cex = 0.8)
 
 ```
 
@@ -252,7 +260,8 @@ cv_leave_one_out <- function(x, y, bandwidth) {
 }
 
 # Calculo el error de cv para cada valor de h en la grilla
-errors <- sapply(bandwidths, cv_leave_one_out, x = HIP.CIRCUMFERENCE, y = BUTTOCK.KNEE.LENGTH)
+errors <- sapply(bandwidths, cv_leave_one_out, x = HIP.CIRCUMFERENCE,
+                 y = BUTTOCK.KNEE.LENGTH)
 
 # Encuentro el valor mínimo de error y su índice correspondiente
 min_error <- min(errors)
@@ -260,12 +269,14 @@ min_error_index <- which.min(errors)
 ksmooth_best_bandwidth <- bandwidths[min_error_index]
 
 # Ploteo la función objectivo marcando el valor mínimo
-plot(bandwidths, errors, type = "b", main = "Leave one out CV Error para ksmooth vs Bandwidth",
+plot(bandwidths, errors, type = "b",
+     main = "Leave one out CV Error para ksmooth vs Bandwidth",
      xlab = "Bandwidth", ylab = "CV Error", col = "blue", pch = 19)
 
 # Marca el valor mínimo de error en el plot
 points(ksmooth_best_bandwidth, min_error, col = "red", pch = 19, cex = 1.5)
-text(ksmooth_best_bandwidth, min_error, labels = paste("Min Error:", round(min_error, 2)), pos = 3, col = "red")
+text(ksmooth_best_bandwidth, min_error, labels =
+       paste("Min Error:", round(min_error, 2)), pos = 3, col = "red")
 
 ```
 
@@ -293,10 +304,14 @@ cv_nwsmooth <- function(bandwidth, x, y){
   m <- sapply(x, nwsmooth, x, y, bandwidth)
   
   # Armo el vector w, que tiene el coeficiente w_i,h en la posición i
-  arg_matrix <- outer(x, x, "-") * (1/bandwidth)  # Matriz con (x[i]-x[j])/bandwidth en la posición ij
-  kernel_matrix <- apply(arg_matrix, c(1, 2), dnorm)  # Núcleo normal aplicado a cada posición
-  column_sums <- colSums(kernel_matrix)  # Sumo las columnas de kernel_matrix, me queda el denominador de w_i,h
-  gaussian_kernel_0 <- dnorm(0)  # El num de w_i,h para todo i
+  # Matriz con (x[i]-x[j])/bandwidth en la posición ij
+  arg_matrix <- outer(x, x, "-") * (1/bandwidth)
+  # Núcleo normal aplicado a cada posición
+  kernel_matrix <- apply(arg_matrix, c(1, 2), dnorm)
+  # Sumo las columnas de kernel_matrix, me queda el denominador de w_i,h
+  column_sums <- colSums(kernel_matrix) 
+  # El num de w_i,h para todo i
+  gaussian_kernel_0 <- dnorm(0)  
   w <- gaussian_kernel_0 / column_sums  # Consigo w
   
   # Vector con error de predicción de m_h^-i en la posición i
@@ -318,17 +333,20 @@ nwsmooth_best_bandwidth <- bandwidths[min_error_index]
 
 
 # Ploteo la función objectivo marcando el valor mínimo
-plot(bandwidths, errors, type = "b", main = "Leave one out CV Error para nwsmooth vs Bandwidth",
+plot(bandwidths, errors, type = "b", 
+     main = "Leave one out CV Error para nwsmooth vs Bandwidth",
      xlab = "Bandwidth", ylab = "CV Error", col = "blue", pch = 19)
 
 # Marca el valor mínimo de error en el plot
 points(nwsmooth_best_bandwidth, min_error, col = "red", pch = 19, cex = 1.5)
-text(nwsmooth_best_bandwidth, min_error, labels = paste("Min Error:", round(min_error, 2)), pos = 3, col = "red")
+text(nwsmooth_best_bandwidth, min_error,
+     labels = paste("Min Error:", round(min_error, 2)), pos = 3, col = "red")
 
 
 # Calculo la regresión
 ordenado <- order(HIP.CIRCUMFERENCE)
-nwfit <- sapply(HIP.CIRCUMFERENCE[ordenado], nwsmooth, HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, nwsmooth_best_bandwidth)
+nwfit <- sapply(HIP.CIRCUMFERENCE[ordenado], nwsmooth, HIP.CIRCUMFERENCE,
+                BUTTOCK.KNEE.LENGTH, nwsmooth_best_bandwidth)
 
 
 # Grafico
@@ -348,9 +366,11 @@ Al utilizar la misma grilla que en el ítem anterior, obtuvimos 20 como *bandwid
 ```{r}
 # Ajusto los modelos
 recta_cuad_min <- lm(BUTTOCK.KNEE.LENGTH ~ HIP.CIRCUMFERENCE)
-ksmoothfit <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal", bandwidth = ksmooth_best_bandwidth)
+ksmoothfit <- ksmooth(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, "normal",
+                      bandwidth = ksmooth_best_bandwidth)
 ordenado <- order(HIP.CIRCUMFERENCE)
-nwfit <- sapply(HIP.CIRCUMFERENCE[ordenado], nwsmooth, HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH, nwsmooth_best_bandwidth)
+nwfit <- sapply(HIP.CIRCUMFERENCE[ordenado], nwsmooth, HIP.CIRCUMFERENCE,
+                BUTTOCK.KNEE.LENGTH, nwsmooth_best_bandwidth)
 
 # Grafico
 plot(HIP.CIRCUMFERENCE, BUTTOCK.KNEE.LENGTH,
@@ -363,7 +383,9 @@ abline(recta_cuad_min, col = "brown", lwd = 2)
 lines(HIP.CIRCUMFERENCE[ordenado], nwfit, col = "red", lwd = 3)
 lines(ksmoothfit, col = "blue", lwd = 2, lty = 2)
 
-legend("bottomright", legend = c("ksmooth(41)", "nwsmooth(15)", "lm"), col = c("blue", "red", "brown"), lty = c(2,1,1), cex = 0.8, lwd = c(2,3,3))
+legend("bottomright", legend = c("ksmooth(41)", "nwsmooth(15)", "lm"),
+       col = c("blue", "red", "brown"), lty = c(2,1,1), cex = 0.8,
+       lwd = c(2,3,3))
 
 ```
 
@@ -393,7 +415,9 @@ linearsmooth <- function(x, X_data, Y_data, h){
 ##### ii)
 
 ```{r,echo=TRUE}
-reg_est <- linearsmooth(datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$HIP.CIRCUMFERENCE, datos_femenino$BUTTOCK.KNEE.LENGTH, 40)
+reg_est <- linearsmooth(datos_femenino$HIP.CIRCUMFERENCE,
+                        datos_femenino$HIP.CIRCUMFERENCE,
+                        datos_femenino$BUTTOCK.KNEE.LENGTH, 40)
 reg_est <- sort(reg_est)
 ```
 
