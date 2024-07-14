@@ -15,11 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 set.seed(1234) 
 library(ggplot2)
 ```
+
 # 1. Teórico
 
 $$
 (X_i, Y_i) \sim (X, Y), \quad \text{donde  }  X, Y \in \mathbb{R} \text{ y } E(Y \mid X = x) = m(x),
-$$ con $m: \mathbb{R} \rightarrow \mathbb{R}$ suave, $K$ núcleo que satisface las propiedades a)-e) $h \in \mathbb{R}$ ventana, sea el estimador de Nadaraya–Watson de $m$ dado por $$
+$$ con $m: \mathbb{R} \rightarrow \mathbb{R}$ suave, $K$ núcleo que satisface las propiedades a)-e) $h \in \mathbb{R}$ ventana, sea el estimador de Nadaraya--Watson de $m$ dado por $$
 \hat{m}_h(x) = \sum_{i=1}^n Y_i \frac{K\left(\frac{X_i - x}{h}\right)}{\sum_{\ell=1}^n K\left(\frac{X_\ell - x}{h}\right)} = \sum_{i=1}^n Y_i w_{i,h}(x). \tag{1}
 $$ Llamemos $\mathbf{Y}$ al vector de respuestas con $i$-ésima componente dada por $Y_i$.
 
@@ -67,6 +68,54 @@ Y_2 \\
 \vdots \\
 Y_n
 \end{pmatrix}
+}_{Y} $$ $\implies$
+
+$$
+\hat{\mathbf{Y}} = S \cdot Y
+$$
+
+#### (b)
+
+##### (i)
+
+Queremos ver que $\hat{m}_{h}^{(-i)}(X_i) = \frac{\hat{m}_h(X_i) - Y_i w_{i,h}(X_i)}{1 - w_{i,h}(X_i)}$
+
+Observamos en primer lugar que $$\begin{align*}
+\hat{m}_h(X_i) - Y_i w_{i,h}(X_i) &= \sum_{j=1}^n Y_j w_{j,h}(X_i) - Y_i w_{i,h}(X_i) \\
+&= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j w_{j,h}(X_j) \\
+&= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \frac{K\left(\frac{X_j - X_i}{h}\right)}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \\
+&= \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right)
+\end{align*} 
+$$
+
+Por otro lado, $$ \begin{align*}
+\frac{1}{1-w_{i,h}(X_i)} \cdot \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} 
+&= \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right) - \frac{K\left(\frac{X_i - X_i}{h}\right)}{{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)}} \cdot \sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \\
+&= \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right) - K\left(\frac{X_i - X_i}{h}\right)} \\
+&= \frac{1}{\sum_{\substack{\ell=1 \\ \ell \neq i}}^n K\left(\frac{X_\ell - X_i}{h}\right)}
+\end{align*}
+$$
+
+Luego, $$ \begin{align*}
+\frac{\hat{m}_h(X_i) - Y_i w_{i,h}(X_i)}{1 - w_{i,h}(X_i)} &= \frac{1}{1-w_{i,h}(X_i)} \cdot \left( \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right) \right) \\
+&= \left( \frac{1}{1-w_{i,h}(X_i)} \cdot \frac{1}{\sum_{\ell=1}^n K\left(\frac{X_\ell - X_i}{h}\right)} \right) \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right) \\
+&= \frac{1}{\sum_{\substack{\ell=1 \\ \ell \neq i}}^n K\left(\frac{X_\ell - X_i}{h}\right)} \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, K\left(\frac{X_j - X_i}{h}\right) \\
+&= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \frac{K\left(\frac{X_j - X_i}{h}\right)}{\sum_{\substack{\ell=1 \\ \ell \neq i}}^n K\left(\frac{X_\ell - X_i}{h}\right)} \\
+&= \sum_{\substack{j=1 \\ j \neq i}}^n Y_j \, w_{j,h}^{-i}(X_i) \\
+&= \hat{m}_{h}^{(-i)}(X_i)
+\end{align*} 
+$$
+
+##### (ii)
+
+Vemos que $CV(h) = \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - \hat{m}_h(X_i))^2}{1 - w_{i,h}(X_i)}$
+
+$$ \begin{align*}
+CV(h) &= \frac{1}{n} \sum_{i=1}^n (Y_i - \hat{m}_h^{-i}(X_i))^2 \\
+&= \frac{1}{n} \sum_{i=1}^n (Y_i - \frac{\hat{m}_h(X_i) - Y_i w_{i,h}(X_i)}{1 - w_{i,h}(X_i)})^2 \\
+&= \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - Y_i w_{i,h}(X_i) - \hat{m}_h(X_i) + Y_i w_{i,h}(X_i))^2}{(1 - w_{i,h}(X_i))^2} \\
+&= \frac{1}{n} \sum_{i=1}^n \frac{(Y_i - \hat{m}_h(X_i))^2}{(1 - w_{i,h}(X_i))^2}
+\end{align*}
 $$
 
 ## Ejercicio 2
@@ -356,7 +405,8 @@ x <- sort(datos_femenino$HIP.CIRCUMFERENCE)
 plot(x, y,
      main = "Comparación de estimadores",
      xlab = "HIP.CIRCUMFERENCE",
-     ylab = "BUTTOCK.KNEE.LENGTH")
+     ylab = "BUTTOCK.KNEE.LENGTH",
+     )
 
 # Agregar los estimadores al gráfico
 lines(x, nwfit, col = "red", lwd = 3)
